@@ -1,0 +1,50 @@
+level = 0
+function level_count(self)
+	level = level + 1
+	print (level)
+end
+
+local function load_first_level(self)
+	msg.post("loader#first_level", "load")
+	msg.post("loader#first_level", "enable")
+end
+
+local function unload_first_level(self)
+	msg.post("loader#first_level","unload")
+end
+
+local function unload_second_level(self)
+	msg.post("loader#second_level","unload")
+end
+
+local function unload_third_level(self)
+	msg.post("loader#third_level","unload")
+end
+
+local function load_second_level(self)
+	msg.post("loader#second_level", "load")
+	msg.post("loader#second_level", "enable")
+end
+
+local function load_third_level(self)
+	msg.post("loader#third_level","load")
+	msg.post("loader#third_level","enable")
+end
+
+function init(self)
+	msg.post(".","acquire_input_focus")
+	load_first_level(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("switch_to_level_two") then
+		if level == 1 then
+			unload_first_level(self)
+			load_second_level(self)
+		end
+		if level == 2 then
+			unload_second_level(self)
+			load_third_level(self)	
+		end
+	end
+end
